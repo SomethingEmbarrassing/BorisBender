@@ -24,10 +24,23 @@ text-decoration:none;
 color:#333;
 }
 
+.calculatorPanel{
+  max-width: 520px;
+}
+
+.shortField{
+  max-width: 3in;
+}
+
 .container{
 display:flex;
 gap:40px;
 padding:40px;
+}
+
+.field select,
+.field input{
+  max-width: 3in;
 }
 
 .calculator{
@@ -108,3 +121,4 @@ max-width:260px;
     linear-gradient(180deg, rgba(200,16,46,.22), rgba(200,16,46,.05));
   border: 1px solid rgba(200,16,46,.50);
 }
+
