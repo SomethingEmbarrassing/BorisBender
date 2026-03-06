@@ -67,9 +67,15 @@ position:relative;
 flex:1;
 }
 
-.boris-img{
-width:100%;
-max-width:600px;
+.tonnageBorisImg{
+  width:50%;
+  max-width:260px;
+  height:auto;
+  display:block;
+  margin: 0 auto;
+  border-radius:14px;
+  border:1px solid rgba(42,53,68,.85);
+  background: rgba(12,16,22,.75);
 }
 
 .boris-text{
@@ -82,4 +88,23 @@ padding:15px;
 border-radius:6px;
 font-size:20px;
 max-width:260px;
+}
+
+.graphicPlaceholder{
+  height: 180px;
+  border-radius: 14px;
+  border: 1px dashed rgba(166,180,199,.35);
+  background: rgba(255,255,255,.02);
+}
+
+.graphicPlaceholder.underLimit{
+  background:
+    linear-gradient(180deg, rgba(53,208,127,.18), rgba(53,208,127,.05));
+  border: 1px solid rgba(53,208,127,.45);
+}
+
+.graphicPlaceholder.overLimit{
+  background:
+    linear-gradient(180deg, rgba(200,16,46,.22), rgba(200,16,46,.05));
+  border: 1px solid rgba(200,16,46,.50);
 }
