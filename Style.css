@@ -126,37 +126,33 @@ max-width:260px;
 
 .borisAnswer{
   font-weight:900;
-  font-size: 20px;
+  font-size:20px;
   text-align:center;
-  margin:0;
-  padding: 18px 14px;
-  width:100%;
-  min-height:120px;
-  border-radius: 14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  line-height:1.35;
+  padding:20px;
+  border-radius:14px;
+  border:1px solid rgba(42,53,68,.85);
+  background:#2b2f36;
+  color:#ffffff;
 }
 
-.graphicPlaceholder{
-  display:none;
-}
-
-/* Under limit = green */
-.graphicPlaceholder.underLimit,
+/* GREEN = under machine capacity */
 .borisAnswer.underLimit{
-  background:
-    linear-gradient(180deg, rgba(53,208,127,.22), rgba(53,208,127,.08));
-  border: 1px solid rgba(53,208,127,.45);
-  color: #d7ffe8;
+  background: linear-gradient(
+    180deg,
+    rgba(40,200,100,0.65),
+    rgba(40,200,100,0.35)
+  );
+  border:2px solid rgba(40,255,140,0.8);
+  color:#ffffff;
 }
 
-/* Over limit = red */
-.graphicPlaceholder.overLimit,
+/* RED = exceeds capacity */
 .borisAnswer.overLimit{
-  background:
-    linear-gradient(180deg, rgba(200,16,46,.24), rgba(200,16,46,.08));
-  border: 1px solid rgba(200,16,46,.50);
-  color: #ffd9df;
+  background: linear-gradient(
+    180deg,
+    rgba(220,40,40,0.75),
+    rgba(220,40,40,0.40)
+  );
+  border:2px solid rgba(255,70,70,0.9);
+  color:#ffffff;
 }
