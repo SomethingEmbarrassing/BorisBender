@@ -204,17 +204,23 @@
       const L = Number(t_len.value);
       const V = Number(t_dieOpening.value);
 
-      if (!(T > 0) || !(L > 0) || !(V > 0)) {
-        if (tpf) tpf.textContent = "—";
-        if (total) total.textContent = "—";
+if (!(T > 0) || !(L > 0) || !(V > 0)) {
 
-        if (borisAnswer) {
-          borisAnswer.textContent = "—";
-          borisAnswer.className = "borisAnswer";
-        }
+  if (tpf) tpf.textContent = "—";
+  if (total) total.textContent = "—";
 
-        return;
-      }
+  if (borisAnswer) {
+    borisAnswer.textContent = "—";
+    borisAnswer.className = "borisAnswer";
+  }
+
+  const borisImg = $("borisImg");
+  if (borisImg) {
+    borisImg.src = "";
+  }
+
+  return;
+}
 
       const tonsPerFoot = (575 * T * T) / V;
       const totalTons = tonsPerFoot * (L / 12);
@@ -223,13 +229,30 @@
       if (total) total.textContent = `${toTons(totalTons)} tons`;
 
       if (borisAnswer) {
-        if (totalTons > 200) {
-          borisAnswer.textContent = `NO — Over 200 tons (${toTons(totalTons)})`;
-          borisAnswer.className = "borisAnswer overLimit";
-        } else {
-          borisAnswer.textContent = `YES — Under 200 tons (${toTons(totalTons)})`;
-          borisAnswer.className = "borisAnswer underLimit";
-        }
+const borisImg = $("borisImg");
+
+if(totalTons > 200){
+
+  borisAnswer.textContent = `NO — Over 200 tons (${toTons(totalTons)})`;
+  borisAnswer.className = "borisAnswer overLimit";
+
+  if(borisImg){
+    borisImg.src =
+    "https://raw.githubusercontent.com/SomethingEmbarrassing/BorisBender/main/Boris%20failed.png";
+  }
+
+}
+else{
+
+  borisAnswer.textContent = `YES — Under 200 tons (${toTons(totalTons)})`;
+  borisAnswer.className = "borisAnswer underLimit";
+
+  if(borisImg){
+    borisImg.src =
+    "https://raw.githubusercontent.com/SomethingEmbarrassing/BorisBender/main/Boris%20cleaned%20up.png";
+  }
+
+}
       }
     }
 
@@ -246,3 +269,4 @@
   initTonnagePage();
 
 })();
+
