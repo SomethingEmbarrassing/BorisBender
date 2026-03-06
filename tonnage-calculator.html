@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tonnage Calculator</title>
+  <link rel="stylesheet" href="Style.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <img class="logo" src="https://raw.githubusercontent.com/SomethingEmbarrassing/BorisBender/main/logo%20large.png" alt="Spokane Metals logo">
+    <nav class="nav">
+      <a class="navlink" href="bend-calculator.html">Bend Calculator</a>
+      <a class="navlink active" href="tonnage-calculator.html">Tonnage Calculator</a>
+    </nav>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <h1 class="h1">Tonnage Calculator</h1>
+
+      <div class="field">
+        <label for="t_thk">Plate Thickness (in)</label>
+        <select id="t_thk"></select>
+      </div>
+
+      <div class="field">
+        <label for="t_len">Bend Length (in)</label>
+        <input id="t_len" type="number" step="0.1" min="0" value="60">
+      </div>
+
+      <div class="field">
+        <label for="t_dieOpening">Die Opening V (in)</label>
+        <select id="t_dieOpening"></select>
+        <div class="hint">Select actual V-die opening from 1/2" to 4" in 1/8" steps.</div>
+      </div>
+
+      <div class="panelSub">
+        <h2 class="h2">Results</h2>
+
+        <div class="outrow">
+          <div>
+            <div class="outname">Tons per foot</div>
+            <div class="outnote">575 × T² / V</div>
+          </div>
+          <div class="outval" id="t_tpf">—</div>
+        </div>
+
+        <div class="outrow">
+          <div>
+            <div class="outname">Total tonnage</div>
+            <div class="outnote">TPF × (length / 12)</div>
+          </div>
+          <div class="outval" id="t_total">—</div>
+        </div>
+
+        <div class="note">Requests to Matt at Ext 107</div>
+      </div>
+    </section>
+
+    <aside class="panel borisPanel">
+      <h2 class="h2">Can Boris bend it?</h2>
+
+      <div class="tonnageBorisWrap">
+        <img class="tonnageBorisImg" src="https://raw.githubusercontent.com/SomethingEmbarrassing/BorisBender/main/Boris%20cleaned%20up.png" alt="Boris the Bender">
+
+        <div class="placeholderWrap">
+          <div id="borisAnswer" class="borisAnswer">—</div>
+          <div id="borisGraphic" class="graphicPlaceholder"></div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script src="Script.js"></script>
+</body>
+</html>
