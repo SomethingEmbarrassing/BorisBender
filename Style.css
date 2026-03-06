@@ -111,23 +111,52 @@ font-size:20px;
 max-width:260px;
 }
 
-.graphicPlaceholder{
-  height: 180px;
+.placeholderWrap{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  min-width:260px;
+  min-height:180px;
+  padding: 14px;
   border-radius: 14px;
-  border: 1px dashed rgba(166,180,199,.35);
-  background: rgba(255,255,255,.02);
+  background: rgba(12,16,22,.75);
+  border:1px solid rgba(42,53,68,.85);
 }
 
-.graphicPlaceholder.underLimit{
+.borisAnswer{
+  font-weight:900;
+  font-size: 20px;
+  text-align:center;
+  margin:0;
+  padding: 18px 14px;
+  width:100%;
+  min-height:120px;
+  border-radius: 14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1.35;
+}
+
+.graphicPlaceholder{
+  display:none;
+}
+
+/* Under limit = green */
+.graphicPlaceholder.underLimit,
+.borisAnswer.underLimit{
   background:
-    linear-gradient(180deg, rgba(53,208,127,.18), rgba(53,208,127,.05));
+    linear-gradient(180deg, rgba(53,208,127,.22), rgba(53,208,127,.08));
   border: 1px solid rgba(53,208,127,.45);
+  color: #d7ffe8;
 }
 
-.graphicPlaceholder.overLimit{
+/* Over limit = red */
+.graphicPlaceholder.overLimit,
+.borisAnswer.overLimit{
   background:
-    linear-gradient(180deg, rgba(200,16,46,.22), rgba(200,16,46,.05));
+    linear-gradient(180deg, rgba(200,16,46,.24), rgba(200,16,46,.08));
   border: 1px solid rgba(200,16,46,.50);
+  color: #ffd9df;
 }
-
-
