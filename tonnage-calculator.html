@@ -26,6 +26,16 @@
       </div>
 
       <div class="field shortField">
+  <label for="t_material">Material Type</label>
+  <select id="t_material">
+    <option value="1.00" selected>A36</option>
+    <option value="1.09">A572-50</option>
+    <option value="0.50">Aluminum</option>
+  </select>
+  <div class="hint">Material factor is applied to the final tonnage.</div>
+</div>
+      
+      <div class="field shortField">
         <label for="t_len">Bend Length (in)</label>
         <input id="t_len" type="number" step="0.1" min="0" value="60">
       </div>
@@ -55,6 +65,14 @@
           <div class="outval" id="t_total">—</div>
         </div>
 
+<div class="outrow">
+  <div>
+    <div class="outname">Material factor</div>
+    <div class="outnote">Applied to base mild-steel tonnage</div>
+  </div>
+  <div class="outval" id="t_matFactor">—</div>
+</div>
+        
         <div class="note">Requests to Matt at Ext 107</div>
       </div>
     </section>
