@@ -120,8 +120,8 @@
     const warn = $("warn");
     const ok = $("ok");
 
-    fillThicknessSelect(thk, 4);      // default 1/4"
-    fillDieOpeningSelect(dieOpening, 2); // default 2"
+    fillThicknessSelect(thk, 4);
+    fillDieOpeningSelect(dieOpening, 2);
 
     function calc() {
       if (warn) {
@@ -135,9 +135,7 @@
       const A = Number(legA.value);
       const B = Number(legB.value);
 
-      // Current bend-page prediction
       const R = T;
-
       if (rin) rin.value = r3(R);
 
       const problems = [];
@@ -190,11 +188,14 @@
     const t_thk = $("t_thk");
     if (!t_thk) return;
 
+    const t_material = $("t_material");
     const t_len = $("t_len");
     const t_dieOpening = $("t_dieOpening");
     const tpf = $("t_tpf");
     const total = $("t_total");
+    const matFactorOut = $("t_matFactor");
     const borisAnswer = $("borisAnswer");
+    const borisImg = $("borisImg");
 
     fillThicknessSelect(t_thk, 6);         // default 3/8"
     fillDieOpeningSelect(t_dieOpening, 3); // default 3"
@@ -203,60 +204,54 @@
       const T = Number(t_thk.value);
       const L = Number(t_len.value);
       const V = Number(t_dieOpening.value);
+      const matFactor = Number(t_material?.value ?? 1);
 
-if (!(T > 0) || !(L > 0) || !(V > 0)) {
+      if (!(T > 0) || !(L > 0) || !(V > 0) || !(matFactor > 0)) {
+        if (tpf) tpf.textContent = "—";
+        if (total) total.textContent = "—";
+        if (matFactorOut) matFactorOut.textContent = "—";
 
-  if (tpf) tpf.textContent = "—";
-  if (total) total.textContent = "—";
+        if (borisAnswer) {
+          borisAnswer.textContent = "—";
+          borisAnswer.className = "borisAnswer";
+        }
 
-  if (borisAnswer) {
-    borisAnswer.textContent = "—";
-    borisAnswer.className = "borisAnswer";
-  }
+        if (borisImg) {
+          borisImg.src = "";
+        }
 
-  const borisImg = $("borisImg");
-  if (borisImg) {
-    borisImg.src = "";
-  }
+        return;
+      }
 
-  return;
-}
-
-      const tonsPerFoot = (575 * T * T) / V;
+      // Base formula assumes mild steel baseline
+      const baseTonsPerFoot = (575 * T * T) / V;
+      const tonsPerFoot = baseTonsPerFoot * matFactor;
       const totalTons = tonsPerFoot * (L / 12);
 
       if (tpf) tpf.textContent = `${toTons(tonsPerFoot)} tons/ft`;
       if (total) total.textContent = `${toTons(totalTons)} tons`;
+      if (matFactorOut) matFactorOut.textContent = `${matFactor.toFixed(2)}×`;
 
       if (borisAnswer) {
-const borisImg = $("borisImg");
+        if (totalTons > 200) {
+          borisAnswer.textContent = `NO — Over 200 tons (${toTons(totalTons)})`;
+          borisAnswer.className = "borisAnswer overLimit";
+        } else {
+          borisAnswer.textContent = `YES — Under 200 tons (${toTons(totalTons)})`;
+          borisAnswer.className = "borisAnswer underLimit";
+        }
+      }
 
-if(totalTons > 200){
-
-  borisAnswer.textContent = `NO — Over 200 tons (${toTons(totalTons)})`;
-  borisAnswer.className = "borisAnswer overLimit";
-
-  if(borisImg){
-    borisImg.src =
-    "https://raw.githubusercontent.com/SomethingEmbarrassing/BorisBender/main/Boris%20failed.png";
-  }
-
-}
-else{
-
-  borisAnswer.textContent = `YES — Under 200 tons (${toTons(totalTons)})`;
-  borisAnswer.className = "borisAnswer underLimit";
-
-  if(borisImg){
-    borisImg.src =
-    "https://raw.githubusercontent.com/SomethingEmbarrassing/BorisBender/main/Boris%20cleaned%20up.png";
-  }
-
-}
+      if (borisImg) {
+        if (totalTons > 200) {
+          borisImg.src = "https://raw.githubusercontent.com/SomethingEmbarrassing/BorisBender/main/Boris%20failed.png";
+        } else {
+          borisImg.src = "https://raw.githubusercontent.com/SomethingEmbarrassing/BorisBender/main/Boris%20cleaned%20up.png";
+        }
       }
     }
 
-    [t_thk, t_len, t_dieOpening].forEach(el => {
+    [t_thk, t_material, t_len, t_dieOpening].forEach(el => {
       if (!el) return;
       el.addEventListener("input", calc);
       el.addEventListener("change", calc);
@@ -269,4 +264,3 @@ else{
   initTonnagePage();
 
 })();
-
