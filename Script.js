@@ -88,25 +88,40 @@
     return `${w} ${n}/${d}"`;
   }
 
-  function fillDieOpeningSelect(selectEl, defaultValue = 3) {
+  function fillDieOpeningSelect(selectEl, defaultValue = 3, options = null) {
     if (!selectEl) return;
 
     selectEl.innerHTML = "";
 
-    // 1/2" to 4" in 1/8" increments
-    for (let eighths = 4; eighths <= 32; eighths++) {
-      const value = eighths / 8;
+    const dieOpeningOptions = options ?? Array.from({ length: 29 }, (_, i) => {
+      const value = (i + 4) / 8;
+      return { label: formatFractionInches(value), value };
+    });
+
+    dieOpeningOptions.forEach(({ label, value }) => {
       const opt = document.createElement("option");
       opt.value = value.toString();
-      opt.textContent = formatFractionInches(value);
+      opt.textContent = label;
 
       if (Math.abs(value - defaultValue) < 0.00001) {
         opt.selected = true;
       }
 
       selectEl.appendChild(opt);
-    }
+    });
   }
+
+  const TONNAGE_DIE_OPENINGS = [
+    { label: '1"', value: 1 },
+    { label: '2"', value: 2 },
+    { label: '3"', value: 3 },
+    { label: '4"', value: 4 },
+    { label: '5"', value: 5 },
+    { label: "16mm", value: 16 / 25.4 },
+    { label: "22mm", value: 22 / 25.4 },
+    { label: "35mm", value: 35 / 25.4 },
+    { label: "50mm", value: 50 / 25.4 },
+  ];
 
   function initBendPage() {
     const thk = $("thk");
@@ -197,8 +212,8 @@
     const borisAnswer = $("borisAnswer");
     const borisImg = $("borisImg");
 
-    fillThicknessSelect(t_thk, 6);         // default 3/8"
-    fillDieOpeningSelect(t_dieOpening, 3); // default 3"
+    fillThicknessSelect(t_thk, 6); // default 3/8"
+    fillDieOpeningSelect(t_dieOpening, 3, TONNAGE_DIE_OPENINGS); // default 3"
 
     function calc() {
       const T = Number(t_thk.value);
