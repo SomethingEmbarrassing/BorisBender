@@ -46,6 +46,11 @@
     return `${sign}${whole} ${n}/${d}"`;
   }
 
+  function formatLegLength(dec) {
+    if (!Number.isFinite(dec)) return "—";
+    return `${r3(dec)}" (${toNearestSixteenth(dec)})`;
+  }
+
   function fillThicknessSelect(selectEl, defaultN16 = 4) {
     if (!selectEl) return;
 
@@ -88,25 +93,40 @@
     return `${w} ${n}/${d}"`;
   }
 
-  function fillDieOpeningSelect(selectEl, defaultValue = 3) {
+  function fillDieOpeningSelect(selectEl, defaultValue = 3, options = null) {
     if (!selectEl) return;
 
     selectEl.innerHTML = "";
 
-    // 1/2" to 4" in 1/8" increments
-    for (let eighths = 4; eighths <= 32; eighths++) {
-      const value = eighths / 8;
+    const dieOpeningOptions = options ?? Array.from({ length: 29 }, (_, i) => {
+      const value = (i + 4) / 8;
+      return { label: formatFractionInches(value), value };
+    });
+
+    dieOpeningOptions.forEach(({ label, value }) => {
       const opt = document.createElement("option");
       opt.value = value.toString();
-      opt.textContent = formatFractionInches(value);
+      opt.textContent = label;
 
       if (Math.abs(value - defaultValue) < 0.00001) {
         opt.selected = true;
       }
 
       selectEl.appendChild(opt);
-    }
+    });
   }
+
+  const TONNAGE_DIE_OPENINGS = [
+    { label: '1"', value: 1 },
+    { label: '2"', value: 2 },
+    { label: '3"', value: 3 },
+    { label: '4"', value: 4 },
+    { label: '5"', value: 5 },
+    { label: "16mm", value: 16 / 25.4 },
+    { label: "22mm", value: 22 / 25.4 },
+    { label: "35mm", value: 35 / 25.4 },
+    { label: "50mm", value: 50 / 25.4 },
+  ];
 
   function initBendPage() {
     const thk = $("thk");
@@ -115,6 +135,7 @@
     const dieOpening = $("dieOpening");
     const rin = $("rin");
     const adeg = $("adeg");
+    const minLeg = $("minLeg");
     const legA = $("legA");
     const legB = $("legB");
     const warn = $("warn");
@@ -131,15 +152,19 @@
       if (ok) ok.hidden = true;
 
       const T = Number(thk.value);
+      const V = Number(dieOpening.value);
       const deg = Math.round(Number(adeg.value));
       const A = Number(legA.value);
       const B = Number(legB.value);
 
       const R = T;
+      const minimumLeg = V * 0.8;
       if (rin) rin.value = r3(R);
+      if (minLeg) minLeg.value = formatLegLength(minimumLeg);
 
       const problems = [];
       if (!(T > 0)) problems.push("Thickness must be > 0.");
+      if (!(V > 0)) problems.push("Die opening must be > 0.");
       if (!(deg > 0 && deg < 180)) problems.push("Angle must be 1–179 degrees.");
       if (!(A >= 0)) problems.push("Leg A must be ≥ 0.");
       if (!(B >= 0)) problems.push("Leg B must be ≥ 0.");
@@ -191,14 +216,15 @@
     const t_material = $("t_material");
     const t_len = $("t_len");
     const t_dieOpening = $("t_dieOpening");
+    const t_minLeg = $("t_minLeg");
     const tpf = $("t_tpf");
     const total = $("t_total");
     const matFactorOut = $("t_matFactor");
     const borisAnswer = $("borisAnswer");
     const borisImg = $("borisImg");
 
-    fillThicknessSelect(t_thk, 6);         // default 3/8"
-    fillDieOpeningSelect(t_dieOpening, 3); // default 3"
+    fillThicknessSelect(t_thk, 6); // default 3/8"
+    fillDieOpeningSelect(t_dieOpening, 3, TONNAGE_DIE_OPENINGS); // default 3"
 
     function calc() {
       const T = Number(t_thk.value);
@@ -210,6 +236,7 @@
         if (tpf) tpf.textContent = "—";
         if (total) total.textContent = "—";
         if (matFactorOut) matFactorOut.textContent = "—";
+        if (t_minLeg) t_minLeg.value = "—";
 
         if (borisAnswer) {
           borisAnswer.textContent = "—";
@@ -224,6 +251,7 @@
       }
 
       // Base formula assumes mild steel baseline
+      const minimumLeg = V * 0.8;
       const baseTonsPerFoot = (575 * T * T) / V;
       const tonsPerFoot = baseTonsPerFoot * matFactor;
       const totalTons = tonsPerFoot * (L / 12);
@@ -231,6 +259,7 @@
       if (tpf) tpf.textContent = `${toTons(tonsPerFoot)} tons/ft`;
       if (total) total.textContent = `${toTons(totalTons)} tons`;
       if (matFactorOut) matFactorOut.textContent = `${matFactor.toFixed(2)}×`;
+      if (t_minLeg) t_minLeg.value = formatLegLength(minimumLeg);
 
       if (borisAnswer) {
         if (totalTons > 200) {
