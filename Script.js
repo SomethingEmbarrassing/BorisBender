@@ -46,6 +46,11 @@
     return `${sign}${whole} ${n}/${d}"`;
   }
 
+  function formatLegLength(dec) {
+    if (!Number.isFinite(dec)) return "—";
+    return `${r3(dec)}" (${toNearestSixteenth(dec)})`;
+  }
+
   function fillThicknessSelect(selectEl, defaultN16 = 4) {
     if (!selectEl) return;
 
@@ -130,6 +135,7 @@
     const dieOpening = $("dieOpening");
     const rin = $("rin");
     const adeg = $("adeg");
+    const minLeg = $("minLeg");
     const legA = $("legA");
     const legB = $("legB");
     const warn = $("warn");
@@ -146,15 +152,19 @@
       if (ok) ok.hidden = true;
 
       const T = Number(thk.value);
+      const V = Number(dieOpening.value);
       const deg = Math.round(Number(adeg.value));
       const A = Number(legA.value);
       const B = Number(legB.value);
 
       const R = T;
+      const minimumLeg = V * 0.8;
       if (rin) rin.value = r3(R);
+      if (minLeg) minLeg.value = formatLegLength(minimumLeg);
 
       const problems = [];
       if (!(T > 0)) problems.push("Thickness must be > 0.");
+      if (!(V > 0)) problems.push("Die opening must be > 0.");
       if (!(deg > 0 && deg < 180)) problems.push("Angle must be 1–179 degrees.");
       if (!(A >= 0)) problems.push("Leg A must be ≥ 0.");
       if (!(B >= 0)) problems.push("Leg B must be ≥ 0.");
@@ -206,6 +216,7 @@
     const t_material = $("t_material");
     const t_len = $("t_len");
     const t_dieOpening = $("t_dieOpening");
+    const t_minLeg = $("t_minLeg");
     const tpf = $("t_tpf");
     const total = $("t_total");
     const matFactorOut = $("t_matFactor");
@@ -225,6 +236,7 @@
         if (tpf) tpf.textContent = "—";
         if (total) total.textContent = "—";
         if (matFactorOut) matFactorOut.textContent = "—";
+        if (t_minLeg) t_minLeg.value = "—";
 
         if (borisAnswer) {
           borisAnswer.textContent = "—";
@@ -239,6 +251,7 @@
       }
 
       // Base formula assumes mild steel baseline
+      const minimumLeg = V * 0.8;
       const baseTonsPerFoot = (575 * T * T) / V;
       const tonsPerFoot = baseTonsPerFoot * matFactor;
       const totalTons = tonsPerFoot * (L / 12);
@@ -246,6 +259,7 @@
       if (tpf) tpf.textContent = `${toTons(tonsPerFoot)} tons/ft`;
       if (total) total.textContent = `${toTons(totalTons)} tons`;
       if (matFactorOut) matFactorOut.textContent = `${matFactor.toFixed(2)}×`;
+      if (t_minLeg) t_minLeg.value = formatLegLength(minimumLeg);
 
       if (borisAnswer) {
         if (totalTons > 200) {
