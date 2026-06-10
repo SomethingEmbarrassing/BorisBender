@@ -44,6 +44,18 @@
         </div>
 
         <div class="field">
+          <label for="minLeg">Minimum Leg Length (0.8 × V)</label>
+          <input id="minLeg" type="text" readonly>
+          <div class="hint">Based on selected V-die opening; shown as decimal inches and nearest 1/16&quot;.</div>
+        </div>
+
+        <div class="field">
+          <label for="topDieDepth">Top Die Depth Past 0.000&quot;</label>
+          <input id="topDieDepth" type="text" readonly>
+          <div class="hint">Geometry estimate from plate thickness, V-opening, and bend angle; confirm with a test bend.</div>
+        </div>
+
+        <div class="field">
           <label for="legA">Leg 1 Outside Dimension A (in)</label>
           <input id="legA" type="number" step="0.001" min="0" value="4.000">
         </div>
