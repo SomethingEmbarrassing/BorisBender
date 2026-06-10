@@ -51,6 +51,14 @@
     return `${r3(dec)}" (${toNearestSixteenth(dec)})`;
   }
 
+  function calculateTopDieDepth(T, V, deg) {
+    if (!(T > 0) || !(V > 0) || !(deg > 0 && deg < 180)) return NaN;
+
+    const bendAngleRad = ((180 - deg) / 2) * Math.PI / 180;
+    const depthToBottomContactLine = (V / 2) * Math.tan(bendAngleRad);
+    return Math.max(0, depthToBottomContactLine - T);
+  }
+
   function fillThicknessSelect(selectEl, defaultN16 = 4) {
     if (!selectEl) return;
 
@@ -136,6 +144,7 @@
     const rin = $("rin");
     const adeg = $("adeg");
     const minLeg = $("minLeg");
+    const topDieDepth = $("topDieDepth");
     const legA = $("legA");
     const legB = $("legB");
     const warn = $("warn");
@@ -159,8 +168,10 @@
 
       const R = T;
       const minimumLeg = V * 0.8;
+      const topDieDepthValue = calculateTopDieDepth(T, V, deg);
       if (rin) rin.value = r3(R);
       if (minLeg) minLeg.value = formatLegLength(minimumLeg);
+      if (topDieDepth) topDieDepth.value = formatLegLength(topDieDepthValue);
 
       const problems = [];
       if (!(T > 0)) problems.push("Thickness must be > 0.");
